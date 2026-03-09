@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}">
+
+<head>
+    <title>Trang chủ</title>
+</head>
+
+<body>
+
+    <section layout:fragment="content">
+
+        <div class="d-flex justify-content-between mb-3">
+            <h3>Danh sách sách</h3>
+            <a class="btn btn-primary" th:href="@{/books/add}">
+                ➕ Thêm sách
+            </a>
+        </div>
+
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Tiêu đề</th>
+                    <th>Hình ảnh</th>
+                    <th>Gía</th>
+                    <th>Tác giả</th>
+                    <th>Danh mục</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="book : ${books}">
+                    <td th:text="${book.id}"></td>
+                    <td th:text="${book.title}"></td>
+                    <td>
+                        <img th:if="${book.image != null}" th:src="@{/images/{img}(img=${book.image})}" width="70"
+                            class="img-thumbnail">
+                    </td>
+                    <td th:text="${#numbers.formatDecimal(book.price, 0, 'COMMA', 2, 'POINT')} + ' đ'"></td>
+                    <td th:text="${book.author}"></td>
+                    <td th:text="${book.category.name}"></td>
+                    <td>
+                        <a class="btn btn-warning btn-sm" th:href="@{/books/edit/{id}(id=${book.id})}">
+                            ✏️ Sửa
+                        </a>
+                        <form th:action="@{/books/delete/{id}(id=${book.id})}" method="post" style="display:inline">
+
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                onclick="return confirm('Bạn có chắc muốn xóa?')">
+                                🗑️ Xóa
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </section>
+
+</body>
+
+</html>
